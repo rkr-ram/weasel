@@ -1,17 +1,29 @@
 import Avatar from "@/components/common/Avatar";
 import Input from "@/components/common/Input";
 import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
+import { ONBOARD_USER_ROUTE } from "@/utils/ApiRoutes";
+import axios from "axios";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 
 function onboarding() {
-  const [{ userInfo }] = useStateProvider();
+  const [{ userInfo,newUser },dispatch] = useStateProvider();
   const [name, setName] = useState(userInfo?.name || "");
   const [about, setAbout] = useState("");
   const [image, setImage] = useState("/default_avatar.png");
   const [hover, setHover] = useState(false);
   const imageRef = useRef(null);
+  const router = useRouter()
+
+  useEffect(()=>{
+    if(!newUser && !userInfo?.email) router.push("/login");
+    else if(!newUser && userInfo.email) router.push("/")
+
+
+  },[userInfo,newUser,router])
 
   const handleClick = (e) => {
     imageRef.current.click();
@@ -27,11 +39,37 @@ function onboarding() {
     return !(name.length < 3);
   };
 
-  const onBoarderHandler = () => {
+  const onBoarderHandler = async () => {
     if (validateDetails()) {
       const email = userInfo.email;
       try {
-      } catch (error) {}
+        const { data } = await axios.post(ONBOARD_USER_ROUTE, {
+          email,
+          name,
+          about,
+          image,
+        });
+        if(data.status){
+          dispatch({
+            type: reducerCases.SET_NEW_USER,
+            newUser: false,
+          });
+          dispatch({
+            type: reducerCases.SET_USER_INFO,
+            userInfo: {
+              id:data.id,
+              name,
+              email,
+              profileImage:image,
+              status:about
+            },
+          });
+          return router.push("/onboarding");
+
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   };
 

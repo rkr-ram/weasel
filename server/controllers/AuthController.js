@@ -17,3 +17,19 @@ export const checkUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const onBoardUser = async (req, res, next) => {
+  try {
+    const { email, name, image: profilePicture, about } = req.body;
+    if (!email || !name) {
+      return res.send("Email,namea are important");
+    }
+    const prisma = getPerismaInstance();
+    await prisma.user.create({
+      data: { name, email, profilePicture, about, createdAt: new Date() },
+    });
+    return res.json({ msg: "Success", status: true });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -5,13 +5,19 @@ import { firebaseApp } from "@/utils/FirebaseConfig";
 import axios from "axios";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Image from "next/image";
-import { Router, useRouter } from "next/router";
-import React from "react";
+import {  useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 const login = () => {
   const router = useRouter();
-  const [{}, dispatch] = useStateProvider();
+  const [{ userInfo, newUser }, dispatch] = useStateProvider();
+
+  useEffect(() => {
+    console.log(userInfo?.id)
+    userInfo?.id && router.push("/");
+  });
+
   const handelOnclick = async () => {
     const provider = new GoogleAuthProvider();
     const {
@@ -20,6 +26,8 @@ const login = () => {
     try {
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
+        console.log(data,"POSTDATA")
+
         if (!data.status) {
           dispatch({
             type: reducerCases.SET_NEW_USER,
@@ -31,9 +39,25 @@ const login = () => {
               name,
               email,
               profileImage,
+              status: "",
             },
           });
           return router.push("/onboarding");
+        } else {
+          const {
+            data: { id, name, email, profilePicture: profileImage, about },
+          } = data;
+          dispatch({
+            type: reducerCases.SET_USER_INFO,
+            userInfo: {
+              id,
+              name,
+              email,
+              profileImage,
+              status: about,
+            },
+          });
+          return router.push("/");
         }
       }
     } catch (error) {
