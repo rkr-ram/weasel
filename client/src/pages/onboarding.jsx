@@ -10,20 +10,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 
 function onboarding() {
-  const [{ userInfo,newUser },dispatch] = useStateProvider();
+  const [{ userInfo, newUser }, dispatch] = useStateProvider();
   const [name, setName] = useState(userInfo?.name || "");
   const [about, setAbout] = useState("");
-  const [image, setImage] = useState("/default_avatar.png");
+  const [image, setImage] = useState(
+    userInfo?.profileImage || "/default_avatar.png"
+  );
   const [hover, setHover] = useState(false);
   const imageRef = useRef(null);
-  const router = useRouter()
+  const router = useRouter();
 
-  useEffect(()=>{
-    if(!newUser && !userInfo?.email) router.push("/login");
-    else if(!newUser && userInfo.email) router.push("/")
-
-
-  },[userInfo,newUser,router])
+  useEffect(() => {
+    if (!newUser && !userInfo?.email) router.push("/login");
+    else if (!newUser && userInfo.email) router.push("/");
+  }, [userInfo, newUser, router]);
 
   const handleClick = (e) => {
     imageRef.current.click();
@@ -49,7 +49,7 @@ function onboarding() {
           about,
           image,
         });
-        if(data.status){
+        if (data.status) {
           dispatch({
             type: reducerCases.SET_NEW_USER,
             newUser: false,
@@ -57,18 +57,18 @@ function onboarding() {
           dispatch({
             type: reducerCases.SET_USER_INFO,
             userInfo: {
-              id:data.id,
+              id: data.data.id,
               name,
               email,
-              profileImage:image,
-              status:about
+              profileImage: image,
+              status: about,
             },
           });
-          return router.push("/onboarding");
 
+          return router.push("/onboarding");
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   };

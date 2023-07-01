@@ -14,9 +14,8 @@ const login = () => {
   const [{ userInfo, newUser }, dispatch] = useStateProvider();
 
   useEffect(() => {
-    console.log(userInfo?.id)
     userInfo?.id && router.push("/");
-  });
+  },[userInfo]);
 
   const handelOnclick = async () => {
     const provider = new GoogleAuthProvider();
@@ -26,7 +25,6 @@ const login = () => {
     try {
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
-        console.log(data,"POSTDATA")
 
         if (!data.status) {
           dispatch({
@@ -70,13 +68,13 @@ const login = () => {
         <Image src="/whatsapp.gif" alt="whatsapp" height={200} width={200} />
         <span className="text-4xl text-white ">Whatsapp</span>
       </div>
-      <buttton
+      <button
         className="flex items-center justify-center gap-7 cursor-pointer bg-search-input-container-background p-5 rounded-lg"
         onClick={handelOnclick}
       >
         <FcGoogle className="text-2xl" />
         <span className="text-white text-2xl">Login with google</span>
-      </buttton>
+      </button>
     </div>
   );
 };

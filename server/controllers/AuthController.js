@@ -25,10 +25,10 @@ export const onBoardUser = async (req, res, next) => {
       return res.send("Email,namea are important");
     }
     const prisma = getPerismaInstance();
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: { name, email, profilePicture, about, createdAt: new Date() },
     });
-    return res.json({ msg: "Success", status: true });
+    return res.json({ msg: "Success", status: true, data: user });
   } catch (error) {
     next(error);
   }
