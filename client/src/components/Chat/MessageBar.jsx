@@ -1,4 +1,5 @@
 import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
 import { ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useState } from "react";
@@ -8,17 +9,19 @@ import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 
 function MessageBar() {
-  const [{ userInfo, currentChatUser }] = useStateProvider();
+  const [{ userInfo, currentChatUser },dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
 
   const sendMessage = async()=>{
     try {
-      const {data} =await axios.post(ADD_MESSAGE_ROUTE,{
+      const {data:{messages}} =await axios.post(ADD_MESSAGE_ROUTE,{
         message,
         from:userInfo?.id,
         to:currentChatUser?.id
       }) 
+      console.log(messages)
       setMessage("")
+      dispatch({ type: reducerCases.UPDATE_NEW_MESSAGES, messages });
     } catch (error) {
       console.log(error)
     }
@@ -42,7 +45,7 @@ function MessageBar() {
           placeholder="Type a message"
           value={message}
           onChange={({ target: { value } }) => setMessage(value)}
-          className="bg-input-background text-sm h-10 w-full py-4 caret-white rounded-lg px-5 focus:outline-none"
+          className="bg-input-background text-sm h-10 w-full py-4 text-white caret-white rounded-lg px-5 focus:outline-none"
         />
       </div>
       <div className="flex w-20 items-center justify-center gap-3">
