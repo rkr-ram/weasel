@@ -1,12 +1,19 @@
 import React from "react";
 import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
 
 function ChatListItem({ data, isContactPage }) {
-  const [{ userInfo }] = useStateProvider();
+  const [{ userInfo,currentChatUser },dispatch] = useStateProvider();
+
+  const handleOnClick=()=>{
+    dispatch({type:reducerCases.SET_CURRENT_CHAT_USER,user:data});
+    dispatch({type:reducerCases.SET_CONTACT_PAGE});
+  }
 
   return (
-    <div className="flex items-center cursor-pointer hover:bg-background-default-hover">
+    <div className="flex items-center cursor-pointer hover:bg-background-default-hover"
+    onClick={handleOnClick}>
       <div className="min-w-fit px-5 pt-3 pb-3">
         <Avatar
           size="sm"
