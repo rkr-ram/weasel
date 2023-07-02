@@ -3,6 +3,7 @@ import { reducerCases } from "./constants";
 export const initialState = {
   userInfo: undefined,
   newUser: false,
+  contactpage: false,
 };
 
 const reducer = (state, action) => {
@@ -16,6 +17,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         newUser: action.newUser,
+      };
+    case reducerCases.SET_CONTACT_PAGE:
+      return {
+        ...state,
+        contactpage: !state.contactpage,
       };
     default:
       return state;
