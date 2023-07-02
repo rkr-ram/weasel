@@ -33,3 +33,31 @@ export const onBoardUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllUsers = async (reeq, res, next) => {
+  try {
+    const prisma = getPerismaInstance();
+    const users =await prisma.user.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        profilePicture: true,
+        about: true,
+      },
+    });
+
+    const usersGroupdeByInitialLetters = {};
+
+    users.map((user) => {
+      const initialLetter = user.name.charAt(0).toUpperCase();
+      !usersGroupdeByInitialLetters[initialLetter] &&
+        (usersGroupdeByInitialLetters[initialLetter] = []);
+      usersGroupdeByInitialLetters[initialLetter].push(user);
+    });
+    return res.status(200).send({ users: usersGroupdeByInitialLetters });
+  } catch (error) {
+    next(error);
+  }
+};
