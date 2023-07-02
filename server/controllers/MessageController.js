@@ -3,12 +3,13 @@ import getPerismaInstance from "../utils/PrismaClient.js";
 export const addMessages = async (req, res, next) => {
   try {
     const prisma = getPerismaInstance();
-    const { messages, from, to } = req.body;
+    const { message, from, to } = req.body;
+    console.log(req.body)
     const getuser = onlineUsers.get(to);
-    if (messages && from && to) {
+    if (message && from && to) {
       const newMessage = await prisma.messages.create({
         data: {
-          messages,
+          message,
           sender: { connect: { id: parseInt(from) } },
           reciever: { connect: { id: parseInt(to) } },
           messageStatus: getuser ? "delivered" : "sent",
