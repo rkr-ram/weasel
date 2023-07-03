@@ -9,23 +9,31 @@ import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 
 function MessageBar() {
-  const [{ userInfo, currentChatUser },dispatch] = useStateProvider();
+  const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
 
-  const sendMessage = async()=>{
+  const sendMessage = async () => {
     try {
-      const {data:{messages}} =await axios.post(ADD_MESSAGE_ROUTE,{
+      const { data } = await axios.post(ADD_MESSAGE_ROUTE, {
         message,
-        from:userInfo?.id,
-        to:currentChatUser?.id
-      }) 
-      console.log(messages)
-      setMessage("")
-      dispatch({ type: reducerCases.UPDATE_NEW_MESSAGES, messages });
+        from: userInfo?.id,
+        to: currentChatUser?.id,
+      });
+      setMessage("");
+
+      socket.current.emit("send-msg", {
+        message: data.message,
+        from: userInfo?.id,
+        to: currentChatUser?.id,
+      });
+      dispatch({
+        type: reducerCases.UPDATE_NEW_MESSAGES,
+        message: data.message,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 relative">

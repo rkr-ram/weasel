@@ -4,19 +4,20 @@ export const addMessages = async (req, res, next) => {
   try {
     const prisma = getPerismaInstance();
     const { message, from, to } = req.body;
-    console.log(req.body);
     const getuser = onlineUsers.get(to);
+    const checkMsgYourSelf = parseInt(from) === parseInt(to);
+    const msgStatus = checkMsgYourSelf ? "read" : "delivered";
     if (message && from && to) {
       const newMessage = await prisma.messages.create({
         data: {
           message,
           sender: { connect: { id: parseInt(from) } },
           reciever: { connect: { id: parseInt(to) } },
-          messageStatus: getuser ? "delivered" : "sent",
+          messageStatus: getuser ? msgStatus : "sent",
         },
         include: { sender: true, reciever: true },
       });
-      return res.status(201).send({ messages: newMessage });
+      return res.status(201).send({ message: newMessage });
     }
     return res.status(400).send("Message and from and to is required");
   } catch (error) {
@@ -48,7 +49,10 @@ export const getMessages = async (req, res, next) => {
 
     const unReadMeassages = [];
     messages.map((message, index) => {
-      if (message.messageStatus !== "read" && message.senderId === parseInt(to)) {
+      if (
+        message.messageStatus !== "read" &&
+        message.senderId === parseInt(to)
+      ) {
         messages[index].messageStatus = "read";
         unReadMeassages.push(message.id);
       }

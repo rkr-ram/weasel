@@ -5,10 +5,11 @@ import MessageStatus from "../common/MessageStatus";
 
 function ChatContainer() {
   const [{ messages, userInfo, currentChatUser }] = useStateProvider();
+  console.log(messages)
   return (
     <div className="h-[80vh] w-full relative flex-grow overflow-auto custom-scrollBar">
       <div className="bg-chat-background h-full w-full bg-fixed opacity-5 fixed top-0 left-0"></div>
-      <div className="mx-10 my-6 relative bottom-0 z-40 left-0">
+      <div className="mx-10 my-6 relative bottom-0 z-40 left-0 ">
         <div className="flex w-full">
           <div className="flex flex-col justify-end gap-1 w-full">
             {messages.map((message, index) => (

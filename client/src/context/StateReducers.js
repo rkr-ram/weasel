@@ -5,7 +5,8 @@ export const initialState = {
   newUser: false,
   contactpage: false,
   currentChatUser: undefined,
-  messages:[]
+  messages:[],
+  socket:undefined
 };
 
 const reducer = (state, action) => {
@@ -39,7 +40,12 @@ const reducer = (state, action) => {
     case reducerCases.UPDATE_NEW_MESSAGES:
       return{
         ...state,
-        messages:[...state.messages,action.messages]
+        messages:[...state.messages,action.message]
+      }
+    case reducerCases.SET_SOCKET:
+      return {
+        ...state,
+        socket:action.socket
       }
     default:
       return state;

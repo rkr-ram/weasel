@@ -7,7 +7,7 @@ function MessageStatus({ messageStatus }) {
       {messageStatus === "sent" && <BsCheck className="text-lg" />}
       {messageStatus === "delivered" && <BsCheckAll className="text-lg" />}
       {messageStatus === "read" && (
-        <BsCheck className="text-lg text-icon-ack" />
+        <BsCheckAll className="text-lg text-icon-ack" />
       )}
     </>
   );
