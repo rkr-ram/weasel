@@ -2,7 +2,8 @@ import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 import { ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
-import React, { useState } from "react";
+import EmojiPicker from "emoji-picker-react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
@@ -11,6 +12,34 @@ import { MdSend } from "react-icons/md";
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
+  const [showEmojiPicker, setshowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (event.target.id !== "Emoji-open") {
+        if (
+          emojiPickerRef.current &&
+          !emojiPickerRef.current.contains(event.target)
+        ) {
+          setshowEmojiPicker(false);
+        }
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
+  const handleEmojiModel = () => {
+    setshowEmojiPicker((prev) => !prev);
+  };
+
+  const handleEmojieClick = ({ emoji }) => {
+    setMessage((prevMsg) => (prevMsg += emoji));
+  };
 
   const sendMessage = async () => {
     try {
@@ -41,12 +70,20 @@ function MessageBar() {
         <BsEmojiSmile
           className="text-panel-header-icon cursor-pointer text-xl"
           title="Emoji"
+          id="Emoji-open"
+          onClick={handleEmojiModel}
         />
+        {showEmojiPicker && (
+          <div className="absolute bottom-24 left-16 z-40" ref={emojiPickerRef}>
+            <EmojiPicker onEmojiClick={handleEmojieClick} theme="dark" />
+          </div>
+        )}
         <ImAttachment
           className="text-panel-header-icon cursor-pointer text-xl"
           title="Attach File"
         />
       </div>
+
       <div className="w-full rounded-lg h-10 items-center">
         <input
           type="text"
@@ -59,7 +96,7 @@ function MessageBar() {
       <div className="flex w-20 items-center justify-center gap-3">
         <div className="bg-teal-light w-10 h-10 rounded-md flex items-center justify-center text-center">
           <MdSend
-            className="text-white cursor-pointer text-xl"
+            className="text-white cursor-pointer text-xl hover:scale-110"
             title="Send Messsage"
             onClick={sendMessage}
           />

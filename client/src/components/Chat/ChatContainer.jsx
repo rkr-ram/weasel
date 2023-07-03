@@ -1,14 +1,40 @@
 import { useStateProvider } from "@/context/StateContext";
 import { calculateTime } from "@/utils/CalculateTime";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MessageStatus from "../common/MessageStatus";
+import Image from "next/image";
+import { BsArrowDownCircleFill } from "react-icons/bs";
 
 function ChatContainer() {
   const [{ messages, userInfo, currentChatUser }] = useStateProvider();
-  console.log(messages)
+  const [showArrowDown, setArrowDown] = useState(true);
+  const scrollRef = useRef(null);
+
+  const handleScrollDown = () => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  };
+
+  useEffect(() => {
+    scrollRef.current.addEventListener("scroll", () => {
+      scrollRef.current.scrollHeight ===
+      scrollRef.current.scrollTop + scrollRef.current.clientHeight
+        ? setArrowDown(false)
+        : setArrowDown(true);
+    });
+   
+  }, []);
+
   return (
-    <div className="h-[80vh] w-full relative flex-grow overflow-auto custom-scrollBar">
-      <div className="bg-chat-background h-full w-full bg-fixed opacity-5 fixed top-0 left-0"></div>
+    <div
+      className="h-[80vh] w-full relative flex-grow overflow-auto custom-scrollBar"
+      ref={scrollRef}
+    >
+      <Image
+        src="/itachis-bg.webp"
+        width={950}
+        height={500}
+        className="bg-fixed fixed bg-no-repeat"
+      />
       <div className="mx-10 my-6 relative bottom-0 z-40 left-0 ">
         <div className="flex w-full">
           <div className="flex flex-col justify-end gap-1 w-full">
@@ -49,6 +75,14 @@ function ChatContainer() {
           </div>
         </div>
       </div>
+      {showArrowDown && (
+        <div
+          className="z-50 fixed bottom-[15%] right-5 cursor-pointers "
+          onClick={handleScrollDown}
+        >
+          <BsArrowDownCircleFill className="text-panel-header-icon cursor-pointer text-2xl hover:text-teal-50" />
+        </div>
+      )}
     </div>
   );
 }

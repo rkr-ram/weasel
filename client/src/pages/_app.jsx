@@ -6,7 +6,7 @@ import Head from "next/head";
 export default function App({ Component, pageProps }) {
   return <StateProvider initialState={initialState} reducer={reducer}>
     <Head>
-      <title>Whatapp</title>
+      <title>WEASEL</title>
       <link rel="shoutcut Icon" href="/favicon.png"></link>
     </Head>
     <Component {...pageProps} />

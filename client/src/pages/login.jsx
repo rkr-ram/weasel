@@ -5,7 +5,7 @@ import { firebaseApp } from "@/utils/FirebaseConfig";
 import axios from "axios";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Image from "next/image";
-import {  useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -15,7 +15,7 @@ const login = () => {
 
   useEffect(() => {
     userInfo?.id && router.push("/");
-  },[userInfo]);
+  }, [userInfo]);
 
   const handelOnclick = async () => {
     const provider = new GoogleAuthProvider();
@@ -63,18 +63,27 @@ const login = () => {
     }
   };
   return (
-    <div className="flex items-center justify-center flex-col gap-6 bg-panel-header-background h-screen w-screen">
-      <div className="flex items-center justify-center gap-2">
-        <Image src="/whatsapp.gif" alt="whatsapp" height={200} width={200} />
-        <span className="text-4xl text-white ">Whatsapp</span>
+    <div className="flex items-center justify-center  flex-col  bg-panel-header-background h-screen w-screen">
+      <div className="border-2 border-solid gap-7 h-4/5 p-12 drop-shadow-xl rounded-md backdrop-opacity-25 border-emerald-500 flex justify-around items-center flex-col">
+        <div className="flex items-center justify-center drop-shadow-xl  gap-7">
+          <Image
+            src="/logo.png"
+            alt="whatsapp"
+            height={100}
+            width={100}
+            className="rounded-full drop-shadow-xl"
+          />
+          <span className="text-4xl text-white ">WEASEL</span>
+        </div>
+        <button
+          className="flex items-center justify-center gap-3 cursor-pointer bg-search-input-container-background p-5 rounded-lg"
+          onClick={handelOnclick}
+        >
+          <FcGoogle className="text-2xl" />
+          <span className="text-white text-2xl">Login with google</span>
+        </button>
+        <span className="text-emerald-300 text-sm">By Temp Devs</span>
       </div>
-      <button
-        className="flex items-center justify-center gap-7 cursor-pointer bg-search-input-container-background p-5 rounded-lg"
-        onClick={handelOnclick}
-      >
-        <FcGoogle className="text-2xl" />
-        <span className="text-white text-2xl">Login with google</span>
-      </button>
     </div>
   );
 };

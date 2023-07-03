@@ -14,7 +14,7 @@ import { io } from "socket.io-client";
 function Main() {
   const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
   const [redirectLogin, setRedirectLogin] = useState(false);
-  const [socketEvent,setSocketEvent] = useState(false)
+  const [socketEvent, setSocketEvent] = useState(false);
   const router = useRouter();
   const socket = useRef();
 
@@ -47,27 +47,26 @@ function Main() {
     }
   });
 
-
   useEffect(() => {
-    if(userInfo){
-    socket.current = io(HOST);
-    socket.current.emit("add-user", userInfo.id);
-    dispatch({ type: reducerCases.SET_SOCKET, socket });
+    if (userInfo) {
+      socket.current = io(HOST);
+      socket.current.emit("add-user", userInfo.id);
+      dispatch({ type: reducerCases.SET_SOCKET, socket });
     }
   }, [userInfo]);
 
-  useEffect(()=>{
-    if(socket.current && !socketEvent){
-      socket.current.on("msg-recieve",(data)=>{
+  useEffect(() => {
+    if (socket.current && !socketEvent) {
+      socket.current.on("msg-recieve", (data) => {
         dispatch({
-          type:reducerCases.UPDATE_NEW_MESSAGES,
-          message:data.message
-        })
-      })
+          type: reducerCases.UPDATE_NEW_MESSAGES,
+          message: data.message,
+        });
+      });
 
-      setSocketEvent(true)
+      setSocketEvent(true);
     }
-  },[socket.current])
+  }, [socket.current]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -76,7 +75,6 @@ function Main() {
       } = await axios.get(
         `${GET_MESSAGES_ROUTE}/${userInfo.id}/${currentChatUser.id}`
       );
-      console.log(messages);
       dispatch({ type: reducerCases.SET_MESSAGES, messages });
     };
     currentChatUser && getMessages();

@@ -31,6 +31,7 @@ global.onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   global.chatSocket = socket;
+
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
   });
@@ -43,4 +44,14 @@ io.on("connection", (socket) => {
         message: data.message,
       });
   });
+
+  socket.on("send-user",(data)=>{
+    console.log(data)
+    const sendUserSocket = onlineUsers.get("1y0mVtPg8eCKims9AAAE");
+    console.log(sendUserSocket)
+    sendUserSocket &&
+      socket.emit("getOnlineStatus", {        
+        status: sendUserSocket ? "online" : "offline",
+      });
+  })
 });
