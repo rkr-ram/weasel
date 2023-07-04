@@ -76,8 +76,8 @@ function onboarding() {
   return (
     <div className="flex items-center justify-center flex-col gap-6 bg-panel-header-background h-screen w-screen">
       <div className="flex items-center justify-center gap-2">
-        <Image src="/whatsapp.gif" alt="whatsapp" height={200} width={200} />
-        <span className="text-4xl text-white ">Whatsapp</span>
+        <Image src="/logo.png" alt="logo" height={200} width={200} className="rounded-full" />
+        <span className="text-4xl text-white ">WEASEL</span>
       </div>
 
       <h2 className="text-white text-2xl">Create new account</h2>
