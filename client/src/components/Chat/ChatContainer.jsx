@@ -31,7 +31,7 @@ function ChatContainer() {
     >
       <Image
         src="/itachis-bg.webp"
-        width={950}
+        width={955}
         height={500}
         className="bg-fixed fixed bg-no-repeat"
       />

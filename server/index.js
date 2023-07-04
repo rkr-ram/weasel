@@ -47,7 +47,8 @@ io.on("connection", (socket) => {
 
   socket.on("send-user",(data)=>{
     console.log(data)
-    const sendUserSocket = onlineUsers.get("1y0mVtPg8eCKims9AAAE");
+    const sendUserSocket = onlineUsers.get(data.to);
+
     console.log(sendUserSocket)
     sendUserSocket &&
       socket.emit("getOnlineStatus", {        
