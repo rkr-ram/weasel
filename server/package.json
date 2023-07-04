@@ -1,8 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
-    "vercel-build":"echo hello"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
