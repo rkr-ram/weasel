@@ -30,7 +30,7 @@ function ChatContainer() {
       ref={scrollRef}
     >
       <Image
-        src="/itachis-bg.webp"
+        src="/itachis-bg.jpg"
         width={955}
         height={500}
         className="bg-fixed fixed bg-no-repeat"
