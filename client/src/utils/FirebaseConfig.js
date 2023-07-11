@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
-import {getAuth} from 'firebase/auth'
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCv9PjCFgcQLSQeS4CgnEnRnvRa90TlW_k",
-  authDomain: "whatsup-clone-6655a.firebaseapp.com",
-  projectId: "whatsup-clone-6655a",
-  storageBucket: "whatsup-clone-6655a.appspot.com",
-  messagingSenderId: "764038681347",
-  appId: "1:764038681347:web:62bed0b0f5fe58bdfb4f36",
-  measurementId: "G-QPDTDWZM56"
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  projectId: "weasel-2b943",
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID,
+  appId: process.env.APPID,
+  measurementId: "G-YMK9SXVJZP",
 };
 
 const app = initializeApp(firebaseConfig);
