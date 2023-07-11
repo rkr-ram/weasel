@@ -17,6 +17,10 @@ app.use(express.json());
 app.use("/api/auth", Authroutes);
 app.use("/api/message", MessageRoute);
 
+app.get('/', (req, res) => {
+  res.send('Hey this is my API running 🥳')
+})
+
 const server = app.listen(PORT, () => {
   console.log(`Server successfully listen on port: ${PORT}`);
 });
